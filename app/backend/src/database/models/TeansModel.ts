@@ -7,24 +7,24 @@ import {
 } from 'sequelize';
 import db from '.';
 
-class TeansModel extends Model<InferAttributes<TeansModel>, InferCreationAttributes<TeansModel>> {
+class TeamsModel extends Model<InferAttributes<TeamsModel>, InferCreationAttributes<TeamsModel>> {
   declare id: CreationOptional<number>;
-  declare teansName: string;
+  declare teamsName: string;
 }
 
-TeansModel.init({
+TeamsModel.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
-  teansName: {
+  teamsName: {
     type: DataTypes.STRING,
     allowNull: false,
   },
 }, {
   sequelize: db,
-  modelName: 'teans',
+  modelName: 'teams',
   timestamps: false,
   underscored: true,
 });
