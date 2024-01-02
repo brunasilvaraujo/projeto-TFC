@@ -29,3 +29,5 @@ TeamsModel.init({
   timestamps: false,
   underscored: true,
 });
+
+export default TeamsModel;
