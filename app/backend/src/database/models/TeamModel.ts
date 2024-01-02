@@ -9,16 +9,17 @@ import db from '.';
 
 class TeamsModel extends Model<InferAttributes<TeamsModel>, InferCreationAttributes<TeamsModel>> {
   declare id: CreationOptional<number>;
-  declare teamsName: string;
+  declare teamName: string;
 }
 
 TeamsModel.init({
   id: {
     type: DataTypes.INTEGER,
+    allowNull: false,
     autoIncrement: true,
     primaryKey: true,
   },
-  teamsName: {
+  teamName: {
     type: DataTypes.STRING,
     allowNull: false,
   },
