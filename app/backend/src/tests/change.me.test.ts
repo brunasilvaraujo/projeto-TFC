@@ -52,4 +52,22 @@ describe('Teams test', () => {
     expect(status).to.equal(200);
     expect(body).to.deep.equal(mockTeam);
   });
+
+  it('Se retorna um id de especifico', async function () {
+    sinon.stub(TeamModel, 'findOne').resolves(mockTeam as any);
+
+    const { status, body } = await chai.request(app).get('/teams/1');
+
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal(mockTeam);
+  });
+
+  it('Se o livro não existe', async function () {
+    sinon.stub(TeamModel, 'findOne').resolves(null);
+
+    const { status, body } = await chai.request(app).get('/teams/1');
+
+    expect(status).to.equal(404);
+    expect(body.message).to.equal('Team 1 not found');
+  })
 });
