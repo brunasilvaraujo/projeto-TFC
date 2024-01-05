@@ -1,7 +1,6 @@
 import TeamsModel from '../database/models/TeamsModel';
 import { ITeam } from '../Interfaces/teams/ITeam';
 import { ITeamModel } from '../Interfaces/teams/ITeamModel';
-// import { NewEntity } from '../Interfaces/index';
 
 export default class TeamModel implements ITeamModel {
   private model = TeamsModel;
