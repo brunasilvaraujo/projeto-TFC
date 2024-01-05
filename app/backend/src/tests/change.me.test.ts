@@ -9,6 +9,7 @@ import TeamModel from '../database/models/TeamsModel';
 import { Response } from 'superagent';
 import { mockTeam } from './mocks/mockTeam';
 import { mockMatches } from './mocks/mockMatches';
+import MatchesModel from '../database/models/MacthesModel';
 
 chai.use(chaiHttp);
 
@@ -78,6 +79,24 @@ describe('Matches test', () => {
     const { body } = await chai.request(app).get('/matches').send();
 
     expect(body).to.be.an('array');
+    expect(body).to.deep.equal(mockMatches);
+  });
+
+  it('Se retorna true inProgress', async function () {
+    sinon.stub(MatchesModel, 'findAll').resolves(mockMatches as any);
+
+    const { status, body } = await chai.request(app).get('/matches?inProgress=true');
+
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal(mockMatches);
+  });
+
+  it('Se retorna true finished', async function () {
+    sinon.stub(MatchesModel, 'findAll').resolves(mockMatches as any);
+
+    const { status, body } = await chai.request(app).get('/matches?inProgress=false');
+
+    expect(status).to.equal(200);
     expect(body).to.deep.equal(mockMatches);
   });
 });

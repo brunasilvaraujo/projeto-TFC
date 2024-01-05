@@ -4,7 +4,7 @@ import { ServiceResponse } from '../Interfaces/ServiceResponse';
 import LoginModel from '../models/LoginModel';
 
 export default class LoginService {
-  private secret = process.env.JWT_SECRET || 'Flamengo';
+  private secret = process.env.JWT_SECRET || 'secret';
 
   constructor(
     private loginModel = new LoginModel(),
