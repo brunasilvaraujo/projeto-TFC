@@ -8,6 +8,7 @@ import TeamModel from '../database/models/TeamsModel';
 
 import { Response } from 'superagent';
 import { mockTeam } from './mocks/mockTeam';
+import { mockMatches } from './mocks/mockMatches';
 
 chai.use(chaiHttp);
 
@@ -70,4 +71,13 @@ describe('Teams test', () => {
     expect(status).to.equal(404);
     expect(body.message).to.equal('Team 1 not found');
   })
+});
+
+describe('Matches test', () => {
+  it('Se retorna all matches', async function () {
+    const { body } = await chai.request(app).get('/matches').send();
+
+    expect(body).to.be.an('array');
+    expect(body).to.deep.equal(mockMatches);
+  });
 });
