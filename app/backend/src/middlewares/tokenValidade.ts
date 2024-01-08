@@ -21,6 +21,11 @@ export default class TokenValidation {
     if (validate === 'Token must be a valid token') {
       return res.status(401).json({ message: 'Token must be a valid token' });
     }
+    // const x = validate as { data: IUser };
+
+    req.body = { token: validate };
+
+    // return res.status(200).json({ role: x.data.role });
 
     next();
   }

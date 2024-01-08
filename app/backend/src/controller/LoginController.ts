@@ -22,9 +22,9 @@ export default class LoginController {
   }
 
   public async loginRole(req: Request, res: Response) {
-    const { email } = req.body;
+    const { token } = req.body;
 
-    const { status, data } = await this.loginService.findRole(email);
+    const { status, data } = await this.loginService.findRole(token);
 
     if (status === 'UNAUTHORIZED') {
       return res.status(401).json(data);

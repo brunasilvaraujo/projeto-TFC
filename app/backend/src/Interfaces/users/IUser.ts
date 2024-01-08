@@ -12,3 +12,7 @@ export interface IUser extends ILogin {
 export type IResponse = Omit<IUser, 'password'>;
 
 export type Role = Pick<IUser, 'role'>;
+
+export type DecodedToken = {
+  data: IResponse;
+};

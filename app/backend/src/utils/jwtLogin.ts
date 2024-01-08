@@ -11,9 +11,9 @@ export default class jwtLogin {
     return sign({ ...payload }, this.secret, this.jwtConfig);
   }
 
-  static verify(token: string): JwtPayload | string {
+  static verify(token: string) {
     try {
-      return verify(token, this.secret) as JwtPayload;
+      return verify(token, this.secret);
     } catch (error) {
       return 'Token must be a valid token';
     }

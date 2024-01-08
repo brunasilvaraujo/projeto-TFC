@@ -1,6 +1,6 @@
 import bcrypt = require('bcryptjs');
 import jwt = require('jsonwebtoken');
-import { Role } from '../Interfaces/users/IUser';
+import { DecodedToken, Role } from '../Interfaces/users/IUser';
 import { ServiceResponse } from '../Interfaces/ServiceResponse';
 import LoginModel from '../models/LoginModel';
 
@@ -27,15 +27,16 @@ export default class LoginService {
       algorithm: 'HS256',
     };
 
-    const { email: _email, password: _password, ...data } = loginExit;
+    const { password: _password, ...data } = loginExit;
 
     const token = jwt.sign({ data }, this.secret, jwtConfig);
 
     return { status: 'SUCCESSFUL', data: { token } };
   }
 
-  public async findRole(email: string): Promise<ServiceResponse<Role>> {
-    const user = await this.loginModel.findByEmail(email);
+  public async findRole(token: DecodedToken): Promise<ServiceResponse<Role>> {
+    console.log(token);
+    const user = await this.loginModel.findByEmail(token.data.email);
 
     if (!user) return { status: 'NOT_FOUND', data: { message: 'Not found' } };
 
