@@ -1,5 +1,5 @@
-import { ServiceResponse } from '../Interfaces/ServiceResponse';
-import { IMatch } from '../Interfaces/matches/IMatch';
+// import { ServiceResponse } from '../Interfaces/ServiceResponse';
+// import { IMatch } from '../Interfaces/matches/IMatch';
 import MatchModel from '../models/MatchModel';
 
 export default class MatchService {
@@ -7,13 +7,17 @@ export default class MatchService {
     private matchesModel = new MatchModel(),
   ) { }
 
-  public async findAll(status: string | undefined): Promise<ServiceResponse<IMatch[]>> {
+  public async findAll(status: string | undefined) {
     if (status !== undefined) {
       const inProgress = status === 'true';
       const matches = await this.matchesModel.matchesProgress(inProgress);
-      return { status: 'SUCCESSFUL', data: matches };
+      return matches;
     }
     const allMatch = await this.matchesModel.findAll();
-    return { status: 'SUCCESSFUL', data: allMatch };
+    return allMatch;
+  }
+
+  public async finishedMatchers(id: number) {
+    await this.matchesModel.finishedMatchers(id);
   }
 }

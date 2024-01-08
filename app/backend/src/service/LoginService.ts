@@ -35,7 +35,6 @@ export default class LoginService {
   }
 
   public async findRole(token: DecodedToken): Promise<ServiceResponse<Role>> {
-    console.log(token);
     const user = await this.loginModel.findByEmail(token.data.email);
 
     if (!user) return { status: 'NOT_FOUND', data: { message: 'Not found' } };

@@ -4,6 +4,7 @@ import MatchesModel from '../database/models/MacthesModel';
 
 export default class MatchModel {
   private model = MatchesModel;
+  private teamModel = new TeamsModel();
 
   public async findAll() {
     const dbData = await this.model.findAll({
@@ -27,5 +28,9 @@ export default class MatchModel {
     });
 
     return dbData;
+  }
+
+  public async finishedMatchers(id: number): Promise<void> {
+    await this.model.update({ inProgress: false }, { where: { id } });
   }
 }

@@ -116,5 +116,19 @@ describe('Matches test', () => {
       expect(status).to.be.equal(401);
       expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
     });
+    it('Se a rotarna usuario valid', async function () {
+      const { body } = await chai.request(app).post('/login').send({
+        email: "admin@admin.com",
+        password: "secret_admin",
+      })
+      expect(body).to.have.property('token');
+    });
+    it('Se a rotarna usuario invalid', async function () {
+      const { body } = await chai.request(app).post('/login').send({
+        email: "@admin.com",
+        password: "_admin",
+      })
+      expect(body).to.have.property('message');
+    });
   });
 });
