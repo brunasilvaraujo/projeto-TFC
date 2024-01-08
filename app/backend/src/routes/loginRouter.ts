@@ -18,7 +18,8 @@ router.post(
 
 router.get(
   '/role',
-  TokenValidation.tokenValidate,
+  (req: Request, res: Response, next: NextFunction) =>
+    TokenValidation.tokenValidate(req, res, next),
   (req: Request, res: Response) =>
     loginController.loginRole(req, res),
 );

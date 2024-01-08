@@ -10,7 +10,6 @@ export default class LoginModel implements IUserModel {
 
     if (!user) return null;
 
-    const { id, username, role, password } = user;
-    return { id, username, role, email, password };
+    return user.dataValues;
   }
 }

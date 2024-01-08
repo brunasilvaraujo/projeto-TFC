@@ -3,8 +3,8 @@ import { NextFunction, Request, Response } from 'express';
 class LoginValidate {
   private regexEmail = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(.[a-z]+)?$/i;
 
-  email(e: string): boolean {
-    return this.regexEmail.test(e);
+  email(_email: string): boolean {
+    return this.regexEmail.test(_email);
   }
 
   public login(req: Request, res: Response, next: NextFunction) {
