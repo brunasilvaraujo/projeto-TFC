@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import mapStatusHTTP from '../utils/mapStausHTTP';
 import LoginService from '../service/LoginService';
 
 export default class LoginController {
@@ -17,6 +18,17 @@ export default class LoginController {
 
     if (status === 'UNAUTHORIZED') {
       return res.status(401).json(data);
+    }
+    return res.status(200).json(data);
+  }
+
+  public async loginRole(req: Request, res: Response) {
+    const { email } = req.body;
+
+    const { status, data } = await this.loginService.findRole(email);
+
+    if (status !== 'SUCCESSFUL') {
+      return res.status(mapStatusHTTP(status)).json(data);
     }
     return res.status(200).json(data);
   }

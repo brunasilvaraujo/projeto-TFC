@@ -6,7 +6,11 @@ export default class LoginModel implements IUserModel {
   private model = UsersModel;
 
   public async findByEmail(email: string): Promise<IUser | null> {
-    const dbData = await this.model.findOne({ where: { email } });
-    return dbData;
+    const user = await this.model.findOne({ where: { email } });
+
+    if (!user) return null;
+
+    const { id, username, role, password } = user;
+    return { id, username, role, email, password };
   }
 }
