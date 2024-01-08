@@ -11,17 +11,17 @@ export default class TokenValidation {
     res: Response,
     next: NextFunction,
   ): Promise<Response | void> {
-    const carrierToken = req.headers.authorization;
+    const { authorization } = req.headers;
+    if (!authorization) return res.status(401).json({ message: 'Token not found' });
 
-    if (!carrierToken) return res.status(401).json({ message: 'Token not found' });
-
-    const token = newToken(carrierToken);
+    const token = newToken(authorization);
 
     const validate = jwtLogin.verify(token);
+
     if (validate === 'Token must be a valid token') {
-      return res.status(401).json({ message: validate });
+      return res.status(401).json({ message: 'Token must be a valid token' });
     }
-    req.body.user = validate;
+
     next();
   }
 }
