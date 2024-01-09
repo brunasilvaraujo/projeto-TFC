@@ -30,7 +30,25 @@ export default class MatchModel {
     return dbData;
   }
 
+  public async findById(id: IMatch['id']): Promise<IMatch | null> {
+    const dbData = await this.model.findByPk(id);
+    if (dbData == null) return null;
+
+    const { awayTeamGoals, awayTeamId, homeTeamGoals, homeTeamId, inProgress }: IMatch = dbData;
+    return { id, awayTeamGoals, awayTeamId, homeTeamGoals, homeTeamId, inProgress };
+  }
+
   public async finishedMatchers(id: number): Promise<void> {
     await this.model.update({ inProgress: false }, { where: { id } });
+  }
+
+  public async updateMatchers(
+    id: IMatch['id'],
+    data: IMatch,
+  ): Promise<IMatch | null> {
+    const dbData = await this.model.update(data, { where: { id } });
+    if (!dbData) return null;
+
+    return this.findById(id);
   }
 }

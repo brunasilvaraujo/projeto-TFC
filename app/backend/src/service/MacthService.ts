@@ -1,5 +1,5 @@
-// import { ServiceResponse } from '../Interfaces/ServiceResponse';
-// import { IMatch } from '../Interfaces/matches/IMatch';
+import { ServiceResponse } from '../Interfaces/ServiceResponse';
+import { IMatch } from '../Interfaces/matches/IMatch';
 import MatchModel from '../models/MatchModel';
 
 export default class MatchService {
@@ -17,7 +17,29 @@ export default class MatchService {
     return allMatch;
   }
 
+  public async getMatchById(id: number): Promise<ServiceResponse<IMatch>> {
+    const match = await this.matchesModel.findById(id);
+    if (!match) return { status: 'NOT_FOUND', data: { message: `Match ${id} not found` } };
+    return { status: 'SUCCESSFUL', data: match };
+  }
+
   public async finishedMatchers(id: number) {
     await this.matchesModel.finishedMatchers(id);
+  }
+
+  public async updateMatchers(id: number, homeTeamGoals: number, awayTeamGoals: number)
+    :
+    Promise<ServiceResponse<IMatch>> {
+    const match = await this.matchesModel.findById(id);
+
+    if (!match) return { status: 'NOT_FOUND', data: { message: 'Not found id' } };
+
+    const updateMatch = { ...match, homeTeamGoals, awayTeamGoals };
+    const matchGoals = await this.matchesModel
+      .updateMatchers(id, updateMatch);
+
+    if (!matchGoals) return { status: 'NOT_FOUND', data: { message: 'Not found' } };
+
+    return { status: 'SUCCESSFUL', data: matchGoals };
   }
 }
