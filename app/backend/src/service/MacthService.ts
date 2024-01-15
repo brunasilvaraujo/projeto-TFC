@@ -48,17 +48,17 @@ export default class MatchService {
     :
     Promise<ServiceResponse<IMatch>> {
     const homeValid = await TeamsModel.findByPk(matchers.homeTeamId);
-    const awatyValid = await TeamsModel.findByPk(matchers.awayTeamId);
+    const awayValid = await TeamsModel.findByPk(matchers.awayTeamId);
 
-    if (!homeValid || !awatyValid) {
+    if (!homeValid || !awayValid) {
       return {
         status: 'NOT_FOUND',
-        data: { message: 'Not found id team' },
+        data: { message: 'There is no team with such id!' },
       };
     }
 
     const newMatchers = await this.matchesModel.createMatchers(matchers);
 
-    return { status: 'SUCCESSFUL', data: newMatchers };
+    return { status: 'CREATED', data: newMatchers };
   }
 }

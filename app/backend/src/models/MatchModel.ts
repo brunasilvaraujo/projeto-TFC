@@ -53,6 +53,7 @@ export default class MatchModel {
   }
 
   public async createMatchers(matchers: IMatch): Promise<IMatch> {
+    console.log(matchers);
     const newMatchers = await this.model.create({
       ...matchers,
       inProgress: true,

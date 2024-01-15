@@ -50,8 +50,8 @@ export default class MatchController {
   public async createMatchers(req: Request, res: Response) {
     const newMatchers = req.body as IMatch;
 
-    const { data } = await this.matchesService.createMatchers(newMatchers);
+    const { status, data } = await this.matchesService.createMatchers(newMatchers);
 
-    return res.status(201).json(data);
+    return res.status(mapStatusHTTP(status)).send(data);
   }
 }

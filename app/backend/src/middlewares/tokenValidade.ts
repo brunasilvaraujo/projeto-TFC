@@ -47,4 +47,26 @@ export default class TokenValidation {
 
     next();
   }
+
+  static async validateNewMatchers(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    const matchers = req.body;
+
+    if (!matchers.homeTeamId || !matchers.awayTeamId) {
+      return res.status(404).json({
+        message: 'There is no team with such id!',
+      });
+    }
+
+    if (matchers.homeTeamId === matchers.awayTeamId) {
+      return res.status(422).json({
+        message: 'It is not possible to create a match with two equal teams',
+      });
+    }
+
+    next();
+  }
 }

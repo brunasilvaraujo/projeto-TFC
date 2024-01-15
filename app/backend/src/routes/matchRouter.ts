@@ -28,6 +28,7 @@ router.post(
   '/',
   (req: Request, res: Response, next: NextFunction) =>
     TokenValidation.tokenValidateMatch(req, res, next),
+  TokenValidation.validateNewMatchers,
   (req: Request, res: Response) =>
     matchController.createMatchers(req, res),
 );
