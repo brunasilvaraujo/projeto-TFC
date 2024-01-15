@@ -7,4 +7,5 @@ export interface IMatchModel {
   finishedMatchers(id: number): Promise<void>;
   updateMatchers(id: IMatch['id'],
     homeTeamGoals: number, awayTeamGoals: number): Promise<IMatch | null>;
+  createMatchers(matchers: IMatch): Promise<IMatch>,
 }

@@ -51,4 +51,13 @@ export default class MatchModel {
 
     return this.findById(id);
   }
+
+  public async createMatchers(matchers: IMatch): Promise<IMatch> {
+    const newMatchers = await this.model.create({
+      ...matchers,
+      inProgress: true,
+    });
+
+    return newMatchers;
+  }
 }

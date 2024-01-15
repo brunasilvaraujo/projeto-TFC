@@ -1,3 +1,4 @@
+import TeamsModel from '../database/models/TeamsModel';
 import { ServiceResponse } from '../Interfaces/ServiceResponse';
 import { IMatch } from '../Interfaces/matches/IMatch';
 import MatchModel from '../models/MatchModel';
@@ -41,5 +42,23 @@ export default class MatchService {
     if (!matchGoals) return { status: 'NOT_FOUND', data: { message: 'Not found' } };
 
     return { status: 'SUCCESSFUL', data: matchGoals };
+  }
+
+  public async createMatchers(matchers: IMatch)
+    :
+    Promise<ServiceResponse<IMatch>> {
+    const homeValid = await TeamsModel.findByPk(matchers.homeTeamId);
+    const awatyValid = await TeamsModel.findByPk(matchers.awayTeamId);
+
+    if (!homeValid || !awatyValid) {
+      return {
+        status: 'NOT_FOUND',
+        data: { message: 'Not found id team' },
+      };
+    }
+
+    const newMatchers = await this.matchesModel.createMatchers(matchers);
+
+    return { status: 'SUCCESSFUL', data: newMatchers };
   }
 }

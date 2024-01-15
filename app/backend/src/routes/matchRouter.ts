@@ -24,4 +24,12 @@ router.patch(
     matchController.updateMatchers(req, res),
 );
 
+router.post(
+  '/',
+  (req: Request, res: Response, next: NextFunction) =>
+    TokenValidation.tokenValidateMatch(req, res, next),
+  (req: Request, res: Response) =>
+    matchController.createMatchers(req, res),
+);
+
 export default router;

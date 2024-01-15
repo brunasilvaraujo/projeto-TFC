@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import mapStatusHTTP from '../utils/mapStausHTTP';
 import MatchService from '../service/MacthService';
+import { IMatch } from '../Interfaces/matches/IMatch';
 
 export default class MatchController {
   constructor(
@@ -44,5 +45,13 @@ export default class MatchController {
       .updateMatchers(id, homeTeamGoals, awayTeamGoals);
 
     return res.status(200).send(data);
+  }
+
+  public async createMatchers(req: Request, res: Response) {
+    const newMatchers = req.body as IMatch;
+
+    const { data } = await this.matchesService.createMatchers(newMatchers);
+
+    return res.status(201).json(data);
   }
 }
