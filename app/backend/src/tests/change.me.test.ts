@@ -10,7 +10,7 @@ import { Response } from 'superagent';
 import { mockTeam } from './mocks/mockTeam';
 import { mockMatches } from './mocks/mockMatches';
 import MatchesModel from '../database/models/MacthesModel';
-import { invalidEmail, invalidPassword } from './mocks/mockUser';
+import { invalidEmail, invalidPassword, validToken } from './mocks/mockUser';
 
 chai.use(chaiHttp);
 
@@ -103,32 +103,87 @@ describe('Matches test', () => {
     expect(body).to.deep.equal(mockMatches);
   });
 
-  describe('User/Login test', () => {
-    it('Se o email é invalid', async function () {
-      const { status, body } = await chai.request(app).post('/login').send(invalidEmail);
+  it('Se retorna CREATED com sucesso', async function () {
+    sinon.stub(MatchesModel, 'create').resolves({} as any);
+    const { status, body } = await chai.request(app).post('/matches').send({
+      homeTeamId: 16,
+      homeTeamGoals: 4,
+      awayTeamId: 8,
+      awayTeamGoals: 1,
+    }).set('Authorization', validToken);
 
-      expect(status).to.be.equal(401);
-      expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
-    });
-    it('Se o passwordl é invalid', async function () {
-      const { status, body } = await chai.request(app).post('/login').send(invalidPassword);
+    expect(status).to.be.eq(201);
+  });
 
-      expect(status).to.be.equal(401);
-      expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
+  it('Se retorna CREATED como 422', async function () {
+    sinon.stub(MatchesModel, 'create').resolves({} as any);
+    const { status, body } = await chai.request(app).post('/matches').send({
+      homeTeamId: 16,
+      homeTeamGoals: 4,
+      awayTeamId: 16,
+      awayTeamGoals: 1,
+    }).set('Authorization', validToken);
+
+    expect(status).to.be.eq(422);
+  });
+
+  it('Se retorna CREATED como 404', async function () {
+    sinon.stub(MatchesModel, 'create').resolves({} as any);
+    const { status, body } = await chai.request(app).post('/matches').send({
+      homeTeamId: 10000,
+      homeTeamGoals: 4,
+      awayTeamId: 16,
+      awayTeamGoals: 1,
+    }).set('Authorization', validToken);
+
+    expect(status).to.be.eq(404);
+  });
+
+  it('Se retorna oken inválido', async function () {
+    sinon.stub(MatchesModel, 'create').resolves({} as any);
+    const { status, body } = await chai.request(app).post('/matches').send({
+      homeTeamId: 10000,
+      homeTeamGoals: 4,
+      awayTeamId: 16,
+      awayTeamGoals: 1,
     });
-    it('Se a rotarna usuario valid', async function () {
-      const { body } = await chai.request(app).post('/login').send({
-        email: "admin@admin.com",
-        password: "secret_admin",
-      })
-      expect(body).to.have.property('token');
-    });
-    it('Se a rotarna usuario invalid', async function () {
-      const { body } = await chai.request(app).post('/login').send({
-        email: "@admin.com",
-        password: "_admin",
-      })
-      expect(body).to.have.property('message');
-    });
+
+    expect(status).to.be.eq(401);
+  });
+
+
+});
+
+describe('User/Login test', () => {
+  it('Se o email é invalid', async function () {
+    const { status, body } = await chai.request(app).post('/login').send(invalidEmail);
+
+    expect(status).to.be.equal(401);
+    expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
+  });
+  it('Se o passwordl é invalid', async function () {
+    const { status, body } = await chai.request(app).post('/login').send(invalidPassword);
+
+    expect(status).to.be.equal(401);
+    expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
+  });
+  it('Se a rotarna usuario valid', async function () {
+    const { body } = await chai.request(app).post('/login').send({
+      email: "admin@admin.com",
+      password: "secret_admin",
+    })
+    expect(body).to.have.property('token');
+  });
+  it('Se a rotarna usuario invalid', async function () {
+    const { body } = await chai.request(app).post('/login').send({
+      email: "@admin.com",
+      password: "_admin",
+    })
+    expect(body).to.have.property('message');
+  });
+  it('Se a rotarna role', async function () {
+    const { status, body } = await chai.request(app).post('/login/role').set('Authorization', validToken);
+    expect(status).to.be.eq(200);
+    expect(body).to.be.equal({ role: 'admin' });
   });
 });

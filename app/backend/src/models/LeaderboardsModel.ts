@@ -16,7 +16,9 @@ export default class LeaderboardsModel implements ILeaderboardModel {
     [sequelize.literal('sum(home_team_goals < away_team_goals)'), 'totalLosses'],
     [sequelize.fn('sum', sequelize.col('home_team_goals')), 'goalsFavor'],
     [sequelize.fn('sum', sequelize.col('away_team_goals')), 'goalsOwn'],
-
+    [sequelize.literal('sum(home_team_goals) - sum(away_team_goals)'), 'goalsBalance'],
+    [sequelize.literal(`(100*(sum(home_team_goals > away_team_goals)*3
+    + sum(home_team_goals = away_team_goals)) / (count(*)*3))`), 'efficiency'],
   ] as sequelize.FindAttributeOptions;
 
   public async findAllLeaderboardHome(): Promise<IMatch[]> {
@@ -32,6 +34,7 @@ export default class LeaderboardsModel implements ILeaderboardModel {
       order: [
         ['totalPoints', 'DESC'],
         ['totalVictories', 'DESC'],
+        ['goalsBalance', 'DESC'],
         ['goalsFavor', 'DESC'],
       ],
     });
